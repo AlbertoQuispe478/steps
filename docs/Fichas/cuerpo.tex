@@ -1,0 +1,68 @@
+\documentclass[11pt,letterpaper]{article}
+\input{../../Propuesta/comun}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\raisebox{-3pt}{\LogoHorizontal{2.5cm}}}
+\fancyhead[R]{\footnotesize Ficha de Historia de Usuario}
+\fancyfoot[C]{\footnotesize \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\usepackage[breakable,skins]{tcolorbox}
+\newtcolorbox{CajaCriterios}{breakable, enhanced jigsaw, sharp corners,
+  colback=white, colframe=black, boxrule=0.8pt,
+  left=6pt, right=6pt, top=4pt, bottom=4pt}
+
+\newcommand{\CajaMockup}[1]{%
+  \begin{center}
+  \IfFileExists{../Fichas/#1.png}{%
+    \includegraphics[width=0.94\linewidth]{../Fichas/#1}%
+  }{\parbox[c][5cm][c]{0.9\linewidth}{\centering\itshape
+      Mockup pendiente en \texttt{Fichas/#1.png}}}
+  \end{center}}
+
+\begin{document}
+\noindent{\Large\bfseries Historia de Usuario \HUNro}
+
+\vspace{0.3em}
+\begin{center}
+\begin{tabular}{|p{1.7cm}|p{13cm}|p{1.5cm}|}
+\hline
+\rule{0pt}{1.6em}\textbf{HU-\HUNro} & \textbf{TÍTULO:} \HUTitulo &
+  {\footnotesize\HUModulo\ $\cdot$ Req. \HUReq\ $\cdot$ \HUPuntos\ pts} \\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{0.2em}
+\begin{center}
+\begin{tabular}{|p{16.6cm}|}
+\hline
+\rule{0pt}{1.2em}\textbf{Como} \HUComo \par\vspace{0.5em}
+\textbf{Quiero} \HUQuiero \par\vspace{0.5em}
+\textbf{Para} \HUPara\par\vspace{0.3em} \\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{0.6em}
+\noindent{\Large\bfseries MOCKUP}
+\begin{center}
+\begin{tabular}{|p{16.6cm}|}
+\hline
+\rule{0pt}{0.3em}\CajaMockup{\HUMockupArchivo}\vspace{0.3em} \\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{0.6em}
+\noindent{\Large\bfseries CRITERIOS DE ACEPTACIÓN}
+\begin{center}
+\begin{CajaCriterios}
+\begin{itemize}[leftmargin=1.4em, itemsep=3pt, topsep=0.2em]
+\HUCriterios
+\end{itemize}
+\end{CajaCriterios}
+\end{center}
+
+\end{document}

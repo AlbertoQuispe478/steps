@@ -1,0 +1,13 @@
+\def\HUNro{08}\def\HUTitulo{Inventario > Gestionar repuestos}
+\def\HUModulo{M5-Inventario}\def\HUReq{RF-08}\def\HUPuntos{8}
+\def\HUComo{recepcionista}
+\def\HUQuiero{gestionar el inventario de repuestos}
+\def\HUPara{controlar stock y generar movimientos}
+\def\HUMockupArchivo{sprint4/mockups/hu08}
+\def\HUCriterios{%
+\item CRUD de repuestos: código, nombre, stock, precios.
+\item Movimientos: ENTRADA, SALIDA, AJUSTE.
+\item Se registra en \texttt{movimiento\_stock} con stock anterior y nuevo.
+\item Alerta cuando stock < stock\_minimo.
+}
+\input{../cuerpo}

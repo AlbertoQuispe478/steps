@@ -1,0 +1,14 @@
+\def\HUNro{01}\def\HUTitulo{Auth > Registro > Registrar cliente}
+\def\HUModulo{M1-Auth}\def\HUReq{RF-01}\def\HUPuntos{3}
+\def\HUComo{persona que desea solicitar servicios de mecánico}
+\def\HUQuiero{registrarme con mis datos personales}
+\def\HUPara{solicitar servicios, aprobar presupuestos y calificar}
+\def\HUMockupArchivo{sprint1/mockups/hu01}
+\def\HUCriterios{%
+\item Formulario: tipo de identificación, número, nombre, apellido, email, teléfono, contraseña.
+\item La contraseña se almacena con hash (bcrypt).
+\item El email debe ser único; si existe, error.
+\item Se crea en tablas \texttt{persona} + \texttt{usuario} con rol CLIENTE.
+\item Tras registro exitoso, redirige al login.
+}
+\input{../cuerpo}

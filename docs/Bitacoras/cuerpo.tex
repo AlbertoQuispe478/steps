@@ -1,0 +1,87 @@
+\documentclass[11pt,letterpaper]{article}
+\input{../Propuesta/comun}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\raisebox{-3pt}{\LogoHorizontal{2.5cm}}}
+\fancyhead[R]{\footnotesize Bitácora \,$\cdot$\, Semana \SemanaNro\ \,$\cdot$\, Sprint \SprintNro}
+\fancyfoot[C]{\footnotesize \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\usepackage{needspace}
+\newcommand{\apartado}[1]{\vspace{0.65em}\needspace{6\baselineskip}\noindent{\bfseries #1}\par\vspace{-0.4em}\noindent\rule{\textwidth}{0.5pt}\par\vspace{0.1em}}
+\newcommand{\caja}[1]{\begin{center}\begin{tabular}{@{}p{15.4cm}@{}}\hline \rule{0pt}{#1} \\ \hline\end{tabular}\end{center}}
+
+\begin{document}
+
+\begin{center}
+{\Large\bfseries Bitácora de Seguimiento de Proyecto}
+\end{center}
+
+\apartado{1. Información General}
+\begin{center}
+\begin{tabular}{@{}>{\bfseries}p{4cm}p{11cm}@{}}
+\hline
+Nombre del proyecto & \Sistema\ (\NombreProyecto) \\
+\hline
+Grupo / Equipo      & \NombreLargo \\
+\hline
+Semana N.\textsuperscript{o} & \SemanaNro\ \quad({\itshape sprint} \SprintNro) \\
+\hline
+Fecha               & \FechaIni\ -- \FechaFin \\
+\hline
+\end{tabular}
+\end{center}
+
+\apartado{2. Avance semanal}
+\BitAvanceTexto
+
+\apartado{3. Actividades realizadas}
+\begin{longtable}{@{}C{1cm}L{8cm}L{4cm}C{2cm}@{}}
+\hline
+\textbf{N.} & \textbf{Actividad} & \textbf{Responsable(s)} & \textbf{Estado} \\
+\hline
+\endhead
+\BitActividades
+\end{longtable}
+
+\apartado{4. Acuerdos alcanzados}
+\BitAcuerdosTexto
+
+\apartado{5. Dificultades encontradas}
+\BitDificultadesTexto
+
+\apartado{6. Tareas pendientes}
+\begin{longtable}{@{}C{1cm}L{8cm}L{3.6cm}C{2.6cm}@{}}
+\hline
+\textbf{N.} & \textbf{Actividad} & \textbf{Responsable(s)} & \textbf{Fecha límite} \\
+\hline
+\endhead
+\BitPendientes
+\end{longtable}
+
+\apartado{7. Aportes individuales}
+\begin{longtable}{@{}L{4.6cm}L{5.6cm}L{3cm}C{2cm}@{}}
+\hline
+\textbf{Apellido Nombre} & \textbf{Aporte} & \textbf{Rol} & \textbf{Nivel} \\
+\hline
+\endhead
+\BitAportes
+\end{longtable}
+
+\apartado{8. Evaluación interna}
+\begin{tabular}{@{}L{3.6cm}C{2cm}L{3.6cm}C{2cm}@{}}
+\hline
+Organización & \BitEvalOrganizacion & Comunicación & \BitEvalComunicacion \\
+\hline
+Cumplimiento & \BitEvalCumplimiento & Compromiso & \BitEvalCompromiso \\
+\hline
+\end{tabular}
+
+\apartado{9. Reflexión del equipo}
+\BitReflexionTexto
+
+\apartado{10. Observaciones del docente}
+\caja{3.6cm}
+
+\end{document}

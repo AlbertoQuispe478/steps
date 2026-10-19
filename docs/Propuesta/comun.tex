@@ -1,0 +1,49 @@
+setlength{headheight}{16pt}
+% ============================================================
+%  comun.tex — configuración compartida para Albert / Tuulapp
+% ============================================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\geometry{letterpaper, margin=2.5cm}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue, urlcolor=cyan}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{positioning, shapes, arrows.meta, calc}
+
+\definecolor{albertblue}{RGB}{30, 90, 160}
+\definecolor{albertgray}{RGB}{100, 100, 100}
+\definecolor{albertgreen}{RGB}{0, 130, 80}
+
+\lstdefinestyle{albert}{
+    backgroundcolor=\color{gray!10},
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{albertblue}\bfseries,
+    stringstyle=\color{albertgreen},
+    commentstyle=\color{albertgray}\itshape,
+    numbers=left, numberstyle=\tiny\color{albertgray},
+    breaklines=true, frame=single
+}
+\lstset{style=albert}
+
+\newcommand{\LogoHorizontal}[1]{%
+  \IfFileExists{logo-horizontal.png}{%
+    \includegraphics[height=#1]{logo-horizontal.png}%
+  }{\textbf{\color{albertblue}ALBERT/TUULAPP}}%
+}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+
+\input{../Propuesta/datos.tex}

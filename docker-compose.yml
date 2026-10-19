@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15.10-alpine
+    container_name: albert_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: Albert
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5433:5432"
+    volumes:
+      - albert_pgdata:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d Albert"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  albert_pgdata:

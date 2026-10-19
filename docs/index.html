@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Albert/Tuulapp — Documentación</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0f172a; color: #e2e8f0; padding: 3rem 2rem;
+      line-height: 1.6;
+    }
+    .container { max-width: 1000px; margin: 0 auto; }
+    header {
+      text-align: center; margin-bottom: 3rem; padding-bottom: 2rem;
+      border-bottom: 1px solid #334155;
+    }
+    h1 { font-size: 2.5rem; color: #38bdf8; margin-bottom: 0.5rem; }
+    .subtitle { color: #94a3b8; }
+    .grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem; margin-top: 2rem;
+    }
+    .card {
+      background: #1e293b; border: 1px solid #334155; border-radius: 12px;
+      padding: 1.8rem; text-decoration: none; color: inherit;
+      transition: all 0.2s; display: block;
+    }
+    .card:hover {
+      border-color: #38bdf8; transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(56, 189, 248, 0.15);
+    }
+    .card h2 { color: #38bdf8; font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .card p { color: #94a3b8; font-size: 0.9rem; }
+    .card .tag {
+      display: inline-block; padding: 0.2rem 0.6rem; border-radius: 999px;
+      font-size: 0.7rem; font-weight: bold; margin-top: 0.8rem;
+    }
+    .tag-html { background: #166534; color: #86efac; }
+    .tag-pdf  { background: #7f1d1d; color: #fca5a5; }
+    footer {
+      text-align: center; color: #64748b; font-size: 0.85rem;
+      margin-top: 4rem; padding-top: 2rem; border-top: 1px solid #334155;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>🏗️ Albert / Tuulapp</h1>
+    <p class="subtitle">Documentación técnica del sistema de gestión de taller mecánico</p>
+  </header>
+
+  <div class="grid">
+    <a href="arquitectura/index.html" class="card">
+      <h2>📐 Arquitectura C4</h2>
+      <p>Modelo completo: contexto, contenedores, componentes y código.</p>
+      <span class="tag tag-html">HTML · Interactivo</span>
+    </a>
+
+    <a href="bitacoras/semana01.pdf" class="card">
+      <h2>📝 Bitácoras semanales</h2>
+      <p>Seguimiento de sprints con formato oficial TIS.</p>
+      <span class="tag tag-pdf">PDF · LaTeX</span>
+    </a>
+
+    <a href="fichas/sprint1/hu01.pdf" class="card">
+      <h2>📋 Fichas de Historia</h2>
+      <p>Historias de usuario con criterios de aceptación y mockups.</p>
+      <span class="tag tag-pdf">PDF · LaTeX</span>
+    </a>
+
+    <a href="https://c4model.com/" target="_blank" class="card">
+      <h2>📚 Referencia C4</h2>
+      <p>Documentación oficial del modelo C4 de Simon Brown.</p>
+      <span class="tag tag-html">Externo</span>
+    </a>
+  </div>
+
+  <footer>
+    <p>NexaSoft S.R.L. · UMSS · Taller de Ingeniería de Software 2/2026</p>
+  </footer>
+</div>
+</body>
+</html>
+
