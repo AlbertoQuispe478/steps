@@ -1,70 +1,46 @@
 -- ============================================================
--- SEMILLAS (Steps): catálogos, roles, permisos por pantalla y usuarios demo.
--- Códigos únicos por catálogo: RCB = orden Recibida, REC = presupuesto Rechazado.
+-- AJUSTES AL ESQUEMA (Steps) — respetan los IDIOMS de Marcelo Flores
+-- Se ejecuta DESPUÉS de 01_schema.sql. Nomenclatura: singular, sustantivos.
 -- ============================================================
-CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
-INSERT INTO tipo_identificacion (codigo, nombre) VALUES ('CI','Cédula de identidad'),('NIT','NIT'),('PAS','Pasaporte'),('CEX','Cédula de extranjero');
-INSERT INTO estado_usuario (codigo, nombre) VALUES ('ACT','Activo'),('INA','Inactivo'),('BLO','Bloqueado');
-INSERT INTO estado_asignacion (codigo, nombre) VALUES ('VIG','Vigente'),('FIN','Finalizada');
-INSERT INTO tipo_rol (codigo, nombre) VALUES ('OPE','Operativo'),('EXT','Externo');
-INSERT INTO tipo_funcion (codigo, nombre) VALUES ('PAN','Pantalla');
+-- IDIOM CLASIFICACIÓN: catálogo de operaciones auditables.
+CREATE TABLE tipo_operacion (
+    id_tipo_operacion SMALLINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    codigo VARCHAR(40) NOT NULL UNIQUE,
+    nombre VARCHAR(100) NOT NULL,
+    descripcion TEXT
+);
 
-INSERT INTO estado_orden (codigo, nombre, es_terminal) VALUES
-('RCB','Recibido',FALSE),('DIA','Diagnóstico',FALSE),('APR','Aprobado',FALSE),
-('REP','En reparación',FALSE),('FIN','Finalizado',FALSE),('ENT','Entregado',TRUE),('ANU','Anulado',TRUE);
+-- IDIOM MAESTRO-DETALLE (hecho de auditoría): quién hizo qué y cuándo.
+-- Solo se inserta; no se edita ni se borra. El usuario puede borrarse sin perder el hecho.
+CREATE TABLE bitacora_operacion (
+    id_bitacora_operacion BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id_usuario INTEGER,
+    id_tipo_operacion SMALLINT NOT NULL,
+    entidad VARCHAR(50) NOT NULL,
+    id_registro BIGINT,
+    detalle TEXT,
+    fecha_operacion TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_bitacora_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario) ON DELETE SET NULL,
+    CONSTRAINT fk_bitacora_tipo FOREIGN KEY (id_tipo_operacion) REFERENCES tipo_operacion(id_tipo_operacion)
+);
+CREATE INDEX idx_bitacora_usuario_fecha ON bitacora_operacion (id_usuario, fecha_operacion);
+CREATE INDEX idx_bitacora_entidad ON bitacora_operacion (entidad, id_registro);
 
-INSERT INTO tipo_comprobante (codigo, nombre) VALUES ('REC','Recibo'),('FAC','Factura');  -- el id 1 (Recibo) es el default de pago
-INSERT INTO tipo_pago (codigo, nombre) VALUES ('EFE','Efectivo'),('QR','QR'),('TRA','Transferencia'),('TAR','Tarjeta');
-INSERT INTO estado_pago (codigo, nombre, es_terminal) VALUES ('PEN','Pendiente',FALSE),('CON','Confirmado',TRUE),('FAL','Fallido',TRUE),('ANU','Anulado',TRUE);
-INSERT INTO estado_factura (codigo, nombre, es_terminal) VALUES ('PEN','Pendiente',FALSE),('EMI','Emitida',FALSE),('ANU','Anulada',TRUE);  -- 'EMI' lo usa v_kpi_venta_diaria
-
-INSERT INTO tipo_servicio (codigo, nombre, precio_hora) VALUES ('MAN','Mantenimiento',100),('REP','Reparación',120),('DIA','Diagnóstico',80);
-INSERT INTO tipo_repuesto (codigo, nombre) VALUES ('FIL','Filtros'),('FRE','Frenos'),('ACE','Aceites'),('ELE','Eléctricos'),('MOT','Motor');
-
-INSERT INTO tipo_operacion (codigo, nombre) VALUES
-('AUTH_LOGIN','Inicio de sesión'),('AUTH_LOGIN_FALLIDO','Intento de sesión fallido'),('AUTH_BLOQUEO','Cuenta bloqueada'),
-('CLIENTE_REGISTRAR','Registro de cliente'),('ORDEN_CREAR','Creación de orden'),('ORDEN_CAMBIAR_ESTADO','Cambio de estado de orden'),
-('PRESUPUESTO_ENVIAR','Envío de presupuesto'),('PRESUPUESTO_RESPONDER','Respuesta a presupuesto'),
-('PAGO_REGISTRAR','Registro de pago'),('FACTURA_EMITIR','Emisión de factura');
-
--- Roles y permisos: una función por pantalla (mismo criterio que el repo de referencia).
-INSERT INTO rol (id_tipo_rol, codigo, nombre)
-SELECT t.id_tipo_rol, v.c, v.n FROM (VALUES ('OPE','ADMIN','Administrador'),('OPE','RECEP','Recepcionista'),('OPE','MECANICO','Mecánico'),('EXT','CLIENTE','Cliente')) v(t,c,n)
-JOIN tipo_rol t ON t.codigo = v.t;
-
-INSERT INTO funcion (id_tipo_funcion, codigo, nombre, ruta, metodo_http)
-SELECT (SELECT id_tipo_funcion FROM tipo_funcion WHERE codigo='PAN'), v.c, v.n, '/'||v.c, 'GET'
-FROM (VALUES ('dashboard','Dashboard'),('recepcion','Recepción'),('ordenes','Órdenes de trabajo'),('presupuestos','Presupuestos'),
-             ('citas','Citas'),('inventario','Inventario'),('pagos','Pagos y facturas'),('reportes','Reportes (BI)')) v(c,n);
-
-INSERT INTO rol_funcion (id_rol, id_funcion)
-SELECT r.id_rol, f.id_funcion FROM (VALUES
- ('ADMIN','dashboard'),('ADMIN','recepcion'),('ADMIN','ordenes'),('ADMIN','presupuestos'),('ADMIN','citas'),('ADMIN','inventario'),('ADMIN','pagos'),('ADMIN','reportes'),
- ('RECEP','dashboard'),('RECEP','recepcion'),('RECEP','ordenes'),('RECEP','presupuestos'),('RECEP','citas'),('RECEP','inventario'),('RECEP','pagos'),
- ('MECANICO','dashboard'),('MECANICO','ordenes'),('MECANICO','presupuestos'),
- ('CLIENTE','dashboard'),('CLIENTE','ordenes')) v(r,f)
-JOIN rol r ON r.codigo = v.r JOIN funcion f ON f.codigo = v.f;
-
--- Usuarios demo (contraseñas solo para desarrollo).
-INSERT INTO persona (id_tipo_identificacion, numero_identificacion, nombre, apellido, email, telefono, id_estado_usuario)
-SELECT (SELECT id_tipo_identificacion FROM tipo_identificacion WHERE codigo='CI'), v.d, v.n, v.a, v.m, v.t,
-       (SELECT id_estado_usuario FROM estado_usuario WHERE codigo='ACT')
-FROM (VALUES ('1000001','Alberto','Quispe','alberto@steps.test','70000001'),('1000002','Carmen','Ríos','carmen@steps.test','70000002'),
-             ('1000003','Luis','Pérez','luis@steps.test','70000003'),('1000004','Carlos','Mamani','carlos@steps.test','70000004')) v(d,n,a,m,t);
-
-INSERT INTO usuario (id_persona, username, password_hash)
-SELECT p.id_persona, v.u, crypt(v.pw, gen_salt('bf', 10))
-FROM (VALUES ('alberto@steps.test','aquispe','Admin12345'),('carmen@steps.test','crios','Recep12345'),
-             ('luis@steps.test','lperez','Mecanico12345'),('carlos@steps.test','cmamani','Cliente12345')) v(m,u,pw)
-JOIN persona p ON p.email = v.m;
-
-INSERT INTO usuario_rol_asignacion (id_usuario, id_rol, id_estado_asignacion)
-SELECT u.id_usuario, r.id_rol, (SELECT id_estado_asignacion FROM estado_asignacion WHERE codigo='VIG')
-FROM (VALUES ('aquispe','ADMIN'),('crios','RECEP'),('lperez','MECANICO'),('cmamani','CLIENTE')) v(u,r)
-JOIN usuario u ON u.username = v.u JOIN rol r ON r.codigo = v.r;
-
--- IS-A: cada persona se especializa según su rol.
-INSERT INTO recepcionista (id_persona, turno) SELECT id_persona, 'MAÑANA' FROM persona WHERE email='carmen@steps.test';
-INSERT INTO mecanico (id_persona, especialidad, valor_hora) SELECT id_persona, 'Mecánica general', 60 FROM persona WHERE email='luis@steps.test';
-INSERT INTO cliente (id_persona) SELECT id_persona FROM persona WHERE email='carlos@steps.test';
+-- IDIOM COMPOSICIÓN (histórico con período): estados por los que pasa una orden.
+-- Misma lógica que usuario_rol_asignacion: fecha_inicio / fecha_fin.
+CREATE TABLE orden_estado_historial (
+    id_orden_estado_historial BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id_orden_trabajo INTEGER NOT NULL,
+    id_estado_orden SMALLINT NOT NULL,
+    id_usuario INTEGER,
+    fecha_inicio TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    fecha_fin TIMESTAMP,
+    observacion TEXT,
+    CONSTRAINT fk_oeh_orden FOREIGN KEY (id_orden_trabajo) REFERENCES orden_trabajo(id_orden_trabajo) ON DELETE CASCADE,
+    CONSTRAINT fk_oeh_estado FOREIGN KEY (id_estado_orden) REFERENCES estado_orden(id_estado_orden),
+    CONSTRAINT fk_oeh_usuario FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario) ON DELETE SET NULL,
+    CONSTRAINT chk_oeh_fechas CHECK (fecha_fin IS NULL OR fecha_fin > fecha_inicio)
+);
+-- Una orden tiene un solo estado vigente a la vez.
+CREATE UNIQUE INDEX uq_orden_estado_vigente ON orden_estado_historial (id_orden_trabajo) WHERE fecha_fin IS NULL;
