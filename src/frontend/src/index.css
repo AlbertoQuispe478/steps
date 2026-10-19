@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+/* Paleta Steps (misma de los mockups). */
+@theme {
+  --color-primary: #1e5aa0;
+  --color-primary-dark: #143f73;
+  --color-accent: #00b4d8;
+  --color-fondo: #f0f4f8;
+  --color-texto: #1e293b;
+  --color-suave: #64748b;
+  --color-borde: #e2e8f0;
+  --color-exito: #10b981;
+  --color-peligro: #ef4444;
+}
+body { @apply bg-fondo text-texto antialiased; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+
+/* Componentes base: botones, campos y tarjetas. */
+@layer components {
+  .btn { @apply rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white transition-all duration-150 hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-50; }
+  .btn-ghost { @apply border border-borde bg-transparent text-primary hover:bg-slate-50; }
+  .btn-exito { @apply bg-exito hover:bg-emerald-600; }
+  .btn-peligro { @apply bg-peligro hover:bg-red-600; }
+  .btn-sm { @apply px-3 py-1.5 text-xs; }
+  .etiqueta { @apply mb-1.5 block text-xs font-bold uppercase tracking-wide text-suave; }
+  .campo { @apply w-full rounded-lg border border-borde bg-white px-3 py-2.5 text-sm outline-none focus:border-primary focus:ring-4 focus:ring-primary/10; }
+  .tarjeta { @apply rounded-xl border border-borde bg-white shadow-sm; }
+}
