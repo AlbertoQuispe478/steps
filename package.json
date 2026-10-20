@@ -4,12 +4,13 @@
   "description": "Professional Node.js backend application",
   "main": "src/index.js",
   "scripts": {
-    "start": "node src/index.js",
-   "dev": "nodemon src/backend/server.js",
-    "test": "jest",
-    "lint": "eslint .",
-    "format": "prettier --write ."
-  },
+  "dev": "nodemon src/backend/server.js",
+  "start": "node src/backend/server.js",
+  "test": "node --test tests/backend",
+  "lint": "eslint src/backend tests --ext .js",
+  "format": "prettier --write \"src/backend/**/*.js\" \"tests/**/*.js\"",
+  "prepare": "husky"
+  }, 
   "keywords": [
     "nodejs",
     "express",
@@ -33,10 +34,27 @@
     "winston": "^3.19.0"
   },
   "devDependencies": {
-    "eslint": "^8.56.0",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.13.0",
+    "husky": "^9.1.7",
     "jest": "^29.7.0",
+    "lint-staged": "^16.4.0",
     "nodemon": "^3.0.2",
-    "prettier": "^3.1.1",
+    "prettier": "^3.9.10",
     "supertest": "^6.3.4"
-  }
+  },
+  "lint-staged": {
+  "src/backend/**/*.js": [
+    "eslint --fix",
+    "prettier --write"
+  ],
+  "tests/**/*.js": [
+    "eslint --fix",
+    "prettier --write"
+  ],
+  "src/frontend/src/**/*.{js,jsx}": [
+    "prettier --write"
+  ]
+}
 }
