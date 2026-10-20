@@ -12,6 +12,10 @@ app.get("/api/health", (_req, res) => res.json({ ok: true }));
 app.use("/api/auth", require("./modules/auth/auth.routes"));
 app.use("/api/clientes", require("./modules/clientes/clientes.routes"));
 app.use("/api/ordenes", require("./modules/ordenes/ordenes.routes"));
+app.use(
+  "/api/presupuestos",
+  require("./modules/presupuestos/presupuestos.routes"),
+);
 // Ruta de prueba del RBAC; se reemplaza cuando exista el módulo de reportes (HU-10).
 app.get("/api/reportes/ping", autenticar, requiere("reportes"), (_req, res) =>
   res.json({ ok: true }),

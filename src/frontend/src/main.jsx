@@ -12,12 +12,13 @@ import SinPermiso from "./paginas/SinPermiso";
 import { MENU } from "./menu";
 import Recepcion from "./paginas/recepcion/Recepcion";
 import Ordenes from "./paginas/ordenes/Ordenes";
-
+import Presupuestos from "./paginas/presupuestos/Presupuestos";
 // Pantallas ya construidas; el resto muestra el marcador "Pendiente".
 const PAGINAS = {
   clientes: <Clientes />,
   recepcion: <Recepcion />,
   ordenes: <Ordenes />,
+  presupuestos: <Presupuestos />,
 };
 
 createRoot(document.getElementById("root")).render(

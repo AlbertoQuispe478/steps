@@ -9,8 +9,8 @@ function autenticar(req, res, next) {
 
   const token = authHeader.split(" ")[1];
   try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET || "secreto");
-    req.usuario = payload;
+    // Si JWT_SECRET no está en .env, esto fallará (lo cual es correcto)
+    req.usuario = jwt.verify(token, process.env.JWT_SECRET);
     next();
   } catch (err) {
     return res.status(401).json({ error: "Token inválido o expirado." });
